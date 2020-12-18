@@ -4,4 +4,4 @@
 PaginaModelo
 *.sqlite3
 
-
+venv
