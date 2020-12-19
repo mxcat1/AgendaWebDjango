@@ -23,4 +23,5 @@ urlpatterns = [
     path('', AgendaAPPVistas.login, name='Login'),
     path('login/', AgendaAPPVistas.login, name='Login'),
     path('usuarioperfil/', AgendaAPPVistas.perfil, name='Mi Perfil'),
+    path('miscontactos/', AgendaAPPVistas.contactos, name='Mis Contactos'),
 ]

@@ -8,3 +8,7 @@ def login(request):
 
 def perfil(request):
     return render(request, 'pages/perfil.html', {'titlepage': 'Mi Perfil', 'tipopagina': 'sidebar-mini'})
+
+
+def contactos(request):
+    return render(request, 'pages/contactos.html', {'titlepage': 'Mis Contactos', 'tipopagina': 'sidebar-mini'})
