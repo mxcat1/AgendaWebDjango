@@ -15,13 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
 
 from AgendaAPP import views as AgendaAPPVistas
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', AgendaAPPVistas.login, name='Login'),
-    path('login/', AgendaAPPVistas.login, name='Login'),
-    path('usuarioperfil/', AgendaAPPVistas.perfil, name='Mi Perfil'),
-    path('miscontactos/', AgendaAPPVistas.contactos, name='Mis Contactos'),
+    path('', AgendaAPPVistas.login, name='index'),
+    path('login/', AgendaAPPVistas.login, name='login'),
+    path('perfil/', AgendaAPPVistas.perfil, name='perfil'),
+    path('contactos/', AgendaAPPVistas.contactos, name='contactos'),
+    path('grupocontactos/', AgendaAPPVistas.grupocontactos, name='grupocontactos'),
 ]
+# Configuracion para ver Imagenes
+if settings.DEBUG:
+    from django.conf.urls.static import static
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
