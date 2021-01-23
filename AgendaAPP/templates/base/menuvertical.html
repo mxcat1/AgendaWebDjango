@@ -1,12 +1,12 @@
 {% load static %}
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../../index3.html" class="brand-link">
+    <a href="{% url 'index' %}" class="brand-link">
         <img src="{% static 'img/AdminLTELogo.png' %}"
              alt="AdminLTE Logo"
              class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <span class="brand-text font-weight-light">AgendaLTE</span>
     </a>
 
     <!-- Sidebar -->
@@ -14,10 +14,10 @@
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+                <img src="{{ user.codPersona.foto.url }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="{% url 'perfil' %}" class="d-block">Alexander Pierce</a>
+                <a href="{% url 'perfil' iduser=user.id %}" class="d-block">{{ user.codPersona.nombre }} {{ user.codPersona.apellido }}</a>
             </div>
         </div>
 
@@ -27,26 +27,26 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{% url 'perfil' %}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                    <a href="{% url 'perfil' iduser=user.id %}" class="nav-link">
+                        <i class="fas fa-address-card"></i>
                         <p>
-                            MI PERFIL
+                            &nbsp;MI PERFIL
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'grupocontactos' %}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-address-book"></i>
                         <p>
-                            GRUPO DE CONTACTOS
+                            &nbsp;GRUPO DE CONTACTOS
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{% url 'contactos' %}" class="nav-link">
-                        <i class="nav-icon fas fa-table"></i>
+                        <i class="fas fa-user-plus"></i>
                         <p>
-                            MIS CONTACTOS
+                            &nbsp;MIS CONTACTOS
                         </p>
                     </a>
                 </li>

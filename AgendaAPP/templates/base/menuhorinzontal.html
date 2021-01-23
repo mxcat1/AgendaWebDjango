@@ -6,7 +6,23 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="../../index3.html" class="nav-link">Inicio</a>
+            <a href="{% url 'index' %}" class="nav-link">Inicio</a>
+        </li>
+                <li class="nav-item d-none d-sm-inline-block">
+            <a href="{% url 'perfil' iduser=user.id %}" class="nav-link">Mi Perfil</a>
+        </li>
+                <li class="nav-item d-none d-sm-inline-block">
+            <a href="{% url 'grupocontactos' %}" class="nav-link">Grupo de Contactos</a>
+        </li>
+                <li class="nav-item d-none d-sm-inline-block">
+            <a href="{% url 'contactos' %}" class="nav-link">Contactos</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a href="{% url 'cerrarsession' %}" class="nav-link">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         </li>
     </ul>
 </nav>

@@ -1,0 +1,278 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block menu %}
+    {% include 'base/menuhorinzontal.html' %}
+    {% include 'base/menuvertical.html' %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Datos del Contacto</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+                            <li class="breadcrumb-item active">Datos del Contacto</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            {% include 'pages/messages.html' %}
+
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <!-- Profile Image -->
+                                <div class="card card-primary card-outline">
+                                    <div class="card-body box-profile">
+                                        <div class="text-center">
+                                            <img class="profile-user-img img-fluid img-circle"
+                                                 src="{{ contactodatos.codPersona.foto.url }}"
+                                                 alt="User profile picture">
+                                        </div>
+
+                                        <h3 class="profile-username text-center">{{ contactodatos.codPersona.nombre }} {{ contactodatos.codPersona.apellido }}</h3>
+
+                                        <p class="text-muted text-center">{{ contactodatos.codPersona.trabajo }}</p>
+
+                                        <ul class="list-group list-group-unbordered mb-3">
+                                            <li class="list-group-item">
+                                                <b>Fecha de Nacimiento</b> <a
+                                                    class="float-right">{{ contactodatos.codPersona.fechaNacimiento }}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Pagina Web Personal</b> <a
+                                                    class="float-right">{{ contactodatos.codPersona.web }}</a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <b>Nº de Identificacion</b> <a
+                                                    class="float-right">{{ contactodatos.codPersona.identificacion }}</a>
+                                            </li>
+                                        </ul>
+
+                                        <a href="#" class="btn btn-primary btn-block" data-toggle="modal"
+                                           data-target="#modaldatospersona"><b>Editar</b></a>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                                <!-- /.card -->
+                                <div class="modal fade" id="modaldatospersona">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Editar Datos del Perfil</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="card card-info">
+                                                    <div class="card-header">
+                                                        <h3 class="card-title">Editar Informacion</h3>
+                                                    </div>
+                                                </div>
+                                                <form method="post" enctype="multipart/form-data"
+                                                      class="form-horizontal">
+                                                    {% csrf_token %}
+                                                    <div class="card-body">
+                                                        <div class="form-group row">
+                                                            {{ form.nombre|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.nombre class='col-sm-10 form-control' %}
+                                                            <small>{{ form.nombre.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            {{ form.apellido|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.apellido class='col-sm-10 form-control' %}
+                                                            <small>{{ form.apellido.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            {{ form.fechaNacimiento|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.fechaNacimiento class='col-sm-10 form-control' %}
+                                                            <small>{{ form.fechaNacimiento.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            {{ form.trabajo|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.trabajo class='col-sm-10 form-control' %}
+                                                            <small>{{ form.trabajo.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            {{ form.alias|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.alias class='col-sm-10 form-control' %}
+                                                            <small>{{ form.alias.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            {{ form.web|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.web class='col-sm-10 form-control' %}
+                                                            <small>{{ form.web.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            {{ form.identificacion|add_label_class:'col-sm-2 col-form-label' }}
+                                                            {% render_field form.identificacion class='col-sm-10 form-control' %}
+                                                            <small>{{ form.identificacion.errors }}</small>
+                                                        </div>
+                                                        <div class="form-group ">
+                                                            {{ form.foto|add_label_class:'form-label' }}
+                                                            {% render_field form.foto class='form-control' %}
+                                                            <small>{{ form.foto.errors }}</small>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                                data-dismiss="modal">
+                                                            Cerrar
+                                                        </button>
+                                                        <button type="submit" class="btn btn-primary">Guardar Cambios
+                                                        </button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- About Me Box -->
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col-sm-8">
+                                                <h3 class="card-title">Telefonos</h3>
+                                            </div>
+                                            <div class="col-sm-4 d-flex justify-content-end">
+                                                <a href="{% url 'new-telefono' personaid=contactodatos.codPersona.id %}"
+                                                   class="btn btn-success btn-sm">Añadir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        {% if telefonoscontacto %}
+                                            {% for telefono in telefonoscontacto %}
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <strong><i
+                                                                class="fas fa-phone"></i>
+                                                            - {{ telefono.numeroTelefono }}
+                                                            - {{ telefono.detalleTelefono }}
+                                                        </strong>
+                                                    </div>
+                                                    <div class="col-sm-4 d-flex justify-content-end align-items-center">
+                                                        <a href="{% url 'delete-telefono' telefonoid=telefono.id %}"
+                                                           onClick="return confirm('¿Seguro que quieres borrar telefono de este Contacto {{ telefono.numeroTelefono }}?');"><i
+                                                                class="fas fa-minus px-1" title="Eliminar Telefono"
+                                                                style="color:red;"></i></a>
+                                                        <a href="{% url 'edit-telefono' telefonoid=telefono.id %}"><i
+                                                                class="fas fa-pen px-1" title="Editar Datos Telefono"
+                                                                style="color:green;"></i></a>
+                                                    </div>
+                                                    <hr>
+
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <strong>No se encontro Nungun Telefono Registrado</strong>
+                                        {% endif %}
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col-sm-8">
+                                                <h3 class="card-title">Correos</h3>
+                                            </div>
+                                            <div class="col-sm-4 d-flex justify-content-end">
+                                                <a href="" class="btn btn-success btn-sm">Añadir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <strong><i class="far fa-file-alt mr-1"></i>
+                                                    xxxxxxxxxx@xxxxx.com</strong>
+                                            </div>
+                                            <div class="col-sm-4 d-flex justify-content-end align-items-center">
+                                                <a href=""><i class="fas fa-minus px-1" style="color:red;"></i></a>
+                                                <a href=""><i class="fas fa-pen px-1" style="color:green;"></i></a>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card card-primary">
+                                    <div class="card-header">
+                                        <div class="row align-items-center">
+                                            <div class="col-sm-8">
+                                                <h3 class="card-title">Direcciones</h3>
+                                            </div>
+                                            <div class="col-sm-4 d-flex justify-content-end">
+                                                <a href="" class="btn btn-success btn-sm">Añadir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Dirrecion aa av
+                                                    aaa</strong>
+                                            </div>
+                                            <div class="col-sm-4 d-flex justify-content-end align-items-center">
+                                                <a href=""><i class="fas fa-minus px-1" style="color:red;"></i></a>
+                                                <a href=""><i class="fas fa-pen px-1" style="color:green;"></i></a>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /.card -->
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'base/footer.html' %}
+{% endblock %}

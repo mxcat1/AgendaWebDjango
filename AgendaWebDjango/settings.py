@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_seed',
+    'widget_tweaks',
     'AgendaAPP',
 ]
 
@@ -125,3 +126,17 @@ STATIC_URL = '/static/'
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+#Configuracion de envio de email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_POST = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'mxcatmax@gmail.com'
+# EMAIL_HOST_PASSWORD = ''
+# EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
+
+# Nuevo Login para la app
+AUTH_USER_MODEL = 'AgendaAPP.Usuario'

@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block menu %}
     {% include 'base/menuhorinzontal.html' %}
@@ -27,158 +28,204 @@
         </section>
         <!-- Main content -->
         <section class="content">
+            {% include 'pages/messages.html' %}
+            <!--Boton dele Modal para agregar un Contacto-->
+            <div class="d-flex justify-content-end m-1">
+                <button class="btn btn-primary m-1 float-left" data-toggle="modal"
+                        data-target="#modalcreatecontacto">Agregar Nuevo Contacto
+                </button>
+            </div>
+            <!--Boton dele Modal para agregar un Contacto-->
+            <!--Modal para agregar un Contacto-->
+            <div class="modal fade" id="modalcreatecontacto">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Crear Nuevo Contacto</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="card card-info">
+                                <div class="card-header">
+                                    <h3 class="card-title">Crear Nuevo Contacto</h3>
+                                </div>
+                            </div>
+                            <form method="post" enctype="multipart/form-data" class="form-horizontal">
+                                {% csrf_token %}
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        {{ form.nombre|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.nombre class='col-sm-10 form-control' %}
+                                        <small>{{ form.nombre.errors }}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.apellido|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.apellido class='col-sm-10 form-control' %}
+                                        <small>{{ form.apellido.errors }}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.fechaNacimiento|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.fechaNacimiento type='date' class='col-sm-10 form-control' %}
+                                        <small>{{ form.fechaNacimiento.errors }}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.trabajo|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.trabajo class='col-sm-10 form-control' %}
+                                        <small>{{ form.trabajo.errors }}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.alias|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.alias class='col-sm-10 form-control' %}
+                                        <small>{{ form.alias.errors }}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.web|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.web class='col-sm-10 form-control' %}
+                                        <small>{{ form.web.errors }}</small>
+                                    </div>
+                                    <div class="form-group row">
+                                        {{ form.identificacion|add_label_class:'col-sm-2 col-form-label' }}
+                                        {% render_field form.identificacion class='col-sm-10 form-control' %}
+                                        <small>{{ form.identificacion.errors }}</small>
+                                    </div>
+                                    <div class="form-group ">
+                                        {{ form.foto|add_label_class:'form-label' }}
+                                        {% render_field form.foto class='form-control' %}
+                                        <small>{{ form.foto.errors }}</small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer justify-content-between">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        Cerrar
+                                    </button>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!--Modal para agregar un Contacto-->
 
             <!-- Default box -->
             <div class="card card-solid">
                 <div class="card-body pb-0">
-                    <div class="row d-flex align-items-stretch">
-                        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                            <div class="card bg-light">
-                                <div class="card-header text-muted border-bottom-0">
-                                    Digital Strategist
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <h2 class="lead"><b>Nicole Pearson</b></h2>
-                                            <p class="text-muted text-sm"><b>About: </b> Web Designer / UX / Graphic
-                                                Artist / Coffee Lover </p>
-                                            <ul class="ml-4 mb-0 fa-ul text-muted">
-                                                <li class="small"><span class="fa-li"><i
-                                                        class="fas fa-lg fa-building"></i></span> Address: Demo Street
-                                                    123, Demo City 04312, NJ
-                                                </li>
-                                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>
-                                                    Phone #: + 800 - 12 12 23 52
-                                                </li>
-                                                <li class="small"><span class="fa-li"><i
-                                                        class="fas fa-lg fa-envelope"></i></span>
-                                                    Email : <a href="">admin@admin.com</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-5 text-center">
-                                            <img src="{% static 'img/user1-128x128.jpg' %}" alt=""
-                                                 class="img-circle img-fluid">
+                    <div id="listacontacto" class="row d-flex align-items-stretch">
+                        {% for contacto in contactos %}
+                            <div class="col-12 col-sm-6 col-md-4 ">
+                                <div class="card bg-light">
+                                    <div class="card-header text-muted border-bottom-0">
+                                        {% if contacto.codContacto.codPersona.trabajo %}
+                                            Trabajo: {{ contacto.codContacto.codPersona.trabajo }}
+                                        {% else %}
+                                            No se Registro ningun Trabajo
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body pt-0">
+                                        <div class="row">
+                                            <div class="col-7">
+                                                <h2 class="lead">
+                                                    <b>{{ contacto.codContacto.codPersona.nombre }} {{ contacto.codContacto.codPersona.apellido }}</b>
+                                                </h2>
+                                                <p class="text-muted text-sm"><b>Alias: </b>
+                                                    {% if contacto.codContacto.codPersona.alias %}
+                                                        {{ contacto.codContacto.codPersona.alias }}
+                                                    {% else %}
+                                                        Sin Ninguna Alias
+                                                    {% endif %}
+                                                    <br>
+                                                    <b>Grupo de Contacto: </b>
+                                                    {{ contacto.codGrupo.nombreGrupo }}
+                                                </p>
+                                                <ul class="ml-4 mb-0 fa-ul text-muted">
+                                                    <li class="small"><span class="fa-li"><i
+                                                            class="fas fa-lg fa-building"></i></span> Address: Demo
+                                                        Street
+                                                        123, Demo City 04312, NJ
+                                                    </li>
+                                                    <li class="small">
+                                                        <div class="input-group-prepend">
+                                                            <button type="button"
+                                                                    class="btn btn-default dropdown-toggle"
+                                                                    data-toggle="dropdown">
+                                                                <span class="fa-li">
+                                                                    <i class="fas fa-lg fa-phone"></i>
+                                                                </span>
+                                                                Telefonos:
+                                                            </button>
+                                                            <div class="dropdown-menu">
+                                                                {% for telefonolista in telefonoslistas %}
+                                                                    {% if contacto.codContacto.codPersona.id == telefonolista.codPersona.id %}
+                                                                        <a class="dropdown-item">
+                                                                            <i class="fas fa-lg fa-phone"></i>
+                                                                            {{ telefonolista.numeroTelefono }}
+                                                                        </a>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+
+                                                    <li class="small"><span class="fa-li"><i
+                                                            class="fas fa-lg fa-envelope"></i></span>
+                                                        Email : <a href="">admin@admin.com</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-5 text-center">
+                                                <img src="{{ contacto.codContacto.codPersona.foto.url }}"
+                                                     alt="Foto Perfil Contacto"
+                                                     class="img-circle img-fluid">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="text-right">
-                                        <a href="#" class="btn btn-sm bg-teal">
-                                            <i class="fas fa-comments"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-user"></i> Ver Contacto
-                                        </a>
+                                    <div class="card-footer">
+                                        <div class="text-right">
+                                            <a href="{% url 'msj-whatsapp' %}" class="btn btn-sm bg-teal"
+                                               title="Enviar Mensaje">
+                                                <i class="fab fa-whatsapp"></i>
+                                            </a>
+                                            <a href="{% url 'contacto-datos' contactoid=contacto.codContacto.id %}"
+                                               class="btn btn-sm btn-primary" title="Ver Datos de Contacto">
+                                                <i class="fas fa-user"></i> Ver Contacto
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                            <div class="card bg-light">
-                                <div class="card-header text-muted border-bottom-0">
-                                    Digital Strategist
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <h2 class="lead"><b>Nicole Pearson</b></h2>
-                                            <p class="text-muted text-sm"><b>About: </b> Web Designer / UX / Graphic
-                                                Artist / Coffee Lover </p>
-                                            <ul class="ml-4 mb-0 fa-ul text-muted">
-                                                <li class="small"><span class="fa-li"><i
-                                                        class="fas fa-lg fa-building"></i></span> Address: Demo Street
-                                                    123, Demo City 04312, NJ
-                                                </li>
-                                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>
-                                                    Phone #: + 800 - 12 12 23 52
-                                                </li>
-                                                <li class="small"><span class="fa-li"><i
-                                                        class="fas fa-lg fa-envelope"></i></span>
-                                                    Email : <a href="">admin@admin.com</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-5 text-center">
-                                            <img src="{% static 'img/user1-128x128.jpg' %}" alt=""
-                                                 class="img-circle img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="text-right">
-                                        <a href="#" class="btn btn-sm bg-teal">
-                                            <i class="fas fa-comments"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-user"></i> Ver Contacto
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                            <div class="card bg-light">
-                                <div class="card-header text-muted border-bottom-0">
-                                    Digital Strategist
-                                </div>
-                                <div class="card-body pt-0">
-                                    <div class="row">
-                                        <div class="col-7">
-                                            <h2 class="lead"><b>Nicole Pearson</b></h2>
-                                            <p class="text-muted text-sm"><b>About: </b> Web Designer / UX / Graphic
-                                                Artist / Coffee Lover </p>
-                                            <ul class="ml-4 mb-0 fa-ul text-muted">
-                                                <li class="small"><span class="fa-li"><i
-                                                        class="fas fa-lg fa-building"></i></span> Address: Demo Street
-                                                    123, Demo City 04312, NJ
-                                                </li>
-                                                <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span>
-                                                    Phone #: + 800 - 12 12 23 52
-                                                </li>
-                                                <li class="small"><span class="fa-li"><i
-                                                        class="fas fa-lg fa-envelope"></i></span>
-                                                    Email : <a href="">admin@admin.com</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-5 text-center">
-                                            <img src="{% static 'img/user1-128x128.jpg' %}" alt=""
-                                                 class="img-circle img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="text-right">
-                                        <a href="#" class="btn btn-sm bg-teal">
-                                            <i class="fas fa-comments"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-user"></i> Ver Contacto
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
+                    <div id="listacontacto-pagination" class="pagination justify-content-center m-0">
+                        <a id="listacontacto-previous" class="disabled page-link"
+                           href="#">Anterior</a>
+
+                        <a id="listacontacto-next" class="page-link"
+                           href="#">Siguiente</a>
+
+                    </div>
+                    <!-- /.card-footer -->
                 </div>
                 <!-- /.card-body -->
-                <div class="card-footer">
-                    <nav aria-label="Contacts Page Navigation">
-                        <ul class="pagination justify-content-center m-0">
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <!-- /.card-footer -->
+
             </div>
             <!-- /.card -->
 
         </section>
         <!-- /.content -->
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/jquery.paginate.js' %}"></script>
+    <script>
+        $(function () {
+            $('#listacontacto').paginate({itemsPerPage: 9})
+        })
+    </script>
 {% endblock %}

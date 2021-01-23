@@ -8,3 +8,9 @@
 .btn-primary, .btn-flat{
     color: #fff !important;
 }
+.ocultar{
+    display: none !important;
+}
+.error{
+    color: #ff2c2c !important;
+}

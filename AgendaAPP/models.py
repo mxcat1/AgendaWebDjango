@@ -1,8 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+import uuid
 
 
 def upload_location(instance, filename):
-    return f'Personas/{instance.id}/{filename}'
+    path = f'Personas/{str(instance.id)}/ {filename}'
+    return path
 
 
 # Create your models here.
@@ -15,6 +18,7 @@ class TimeStampMixin(models.Model):
 
 
 class Persona(TimeStampMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=150)
     apellido = models.CharField(max_length=150)
     fechaNacimiento = models.DateField()
@@ -22,29 +26,35 @@ class Persona(TimeStampMixin):
     alias = models.CharField(max_length=100, null=True)
     web = models.CharField(max_length=250, null=True)
     identificacion = models.CharField(max_length=15, null=True)
-    foto = models.ImageField(null=True, upload_to=upload_location)
+    foto = models.ImageField(null=True, upload_to=upload_location, default='Personas/perfil.jpg')
 
     class Meta:
         verbose_name = 'Persona'
 
     def __str__(self):
-        return f'{self.id}) {self.nombre} Fecha Creacion {self.created_at} Fecha Actualizacion {self.updated_at}'
+        return f'{self.id}) {self.nombre}'
 
 
-class Usuario(TimeStampMixin):
-    nombreUsuario = models.CharField(max_length=150)
-    contrasenia = models.CharField(max_length=150)
-    codPersona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='Usuario')
+class Usuario(AbstractUser):
+    # nombreUsuario = models.CharField(max_length=150, unique=True)
+    # emailSuperuser = models.EmailField()
+    # is_active = models.BooleanField(default=True)
+    # contrasenia = models.CharField(max_length=150)
+    codPersona = models.OneToOneField(Persona, null=True, on_delete=models.SET_NULL, related_name='Usuario')
 
-    class Meta:
-        verbose_name = 'Usuario'
+    # USERNAME_FIELD = 'nombreUsuario'
+    # EMAIL_FIELD = 'emailSuperuser'
+    # REQUIRED_FIELDS = []
+    # REQUIRED_FIELDS = ['codPersona']
+    # class Meta:
+    #     verbose_name = 'Usuario'
 
-    def __str__(self):
-        return f'{self.id}-{self.codPersona}) {self.nombreUsuario} Fecha Creacion {self.created_at} Fecha Actualizacion {self.updated_at}'
+    # def __str__(self):
+    #     return f'{self.id}-{self.codPersona}) {self.nombreUsuario} Fecha Creacion {self.created_at} Fecha Actualizacion {self.updated_at}'
 
 
 class Contacto(TimeStampMixin):
-    codPersona = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name='Contacto')
+    codPersona = models.OneToOneField(Persona, null=True, on_delete=models.SET_NULL, related_name='Contacto')
 
     class Meta:
         verbose_name = 'Contacto'
@@ -64,12 +74,13 @@ class GrupoContactos(TimeStampMixin):
         verbose_name_plural = 'GrupoContactos'
 
     def __str__(self):
-        return f'{self.id}-{self.codUsuario} {self.nombreGrupo}) Fecha Creacion {self.created_at} Fecha Actualizacion {self.updated_at}'
+        return f'{self.id}-{self.nombreGrupo}'
 
 
 class ContactoGrupoContactos(TimeStampMixin):
-    codGrupo = models.ForeignKey(GrupoContactos, on_delete=models.CASCADE)
-    codContacto = models.ForeignKey(Contacto, on_delete=models.CASCADE)
+    codGrupo = models.ForeignKey(GrupoContactos, on_delete=models.CASCADE, default='Por Defecto')
+    # codContacto = models.ForeignKey(Contacto, on_delete=models.CASCADE)
+    codContacto = models.ForeignKey(Contacto, null=True, on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name = 'ContactoGrupoContactos'
@@ -114,7 +125,7 @@ class DetalleTelefono(TimeStampMixin):
         verbose_name = 'DetalleTelefono'
 
     def __str__(self):
-        return f'{self.id}) {self.tipo} {self.operador} Fecha Creacion {self.created_at} Fecha Actualizacion {self.updated_at}'
+        return f'{self.tipo} {self.operador}'
 
 
 class TelefonoPersona(TimeStampMixin):

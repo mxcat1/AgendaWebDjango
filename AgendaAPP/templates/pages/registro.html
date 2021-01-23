@@ -1,15 +1,41 @@
 {% extends 'base/base.html' %}
-
-{% block menu %}
-    {% include 'base/menuhorinzontal.html' %}
-    {% include 'base/menuvertical.html' %}
-
-{% endblock %}
+{% load widget_tweaks %}
 
 {% block body %}
-
-{% endblock %}
-
-{% block footer %}
-    {% include 'base/footer.html' %}
+    <div class="login-box w-50">
+        <div class="card card-info w-100">
+            <div class="card-header">
+                <h3 class="card-title">Nuevo Usuario/Persona</h3>
+            </div>
+            <form method="post" enctype="multipart/form-data" class="formhorizontal">
+                <div class="card-body">
+                    <div class="form-group">
+                        {{ form.nombre|add_label_class:'form-label' }}
+                        {% render_field form.nombre class='form-control' %}
+                        <small class="error">{{ form.nombre.errors }}</small>
+                    </div>
+                    <div class="form-group">
+                        {{ form.apellido|add_label_class:'form-label' }}
+                        {% render_field form.apellido class='form-control' %}
+                        <small class="error">{{ form.apellido.errors }}</small>
+                    </div>
+                    <div class="form-group">
+                        {{ form.fechaNacimiento|add_label_class:'form-label' }}
+                        {% render_field form.fechaNacimiento type='date' class='form-control' %}
+                        <small class="error">{{ form.fechaNacimiento.errors }}</small>
+                    </div>
+{#                    <div class="form-group">#}
+{#                        {{ form.foto|add_label_class:'form-label' }}#}
+{#                        {% render_field form.foto class='form-control' %}#}
+{#                        <small>{{ form.foto.errors }}</small>#}
+{#                    </div>#}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-info">Siguiente</button>
+                    <a href="{% url 'login' %}" type="submit" class="btn btn-default float-right">cancelar</a>
+                </div>
+                {% csrf_token %}
+            </form>
+        </div>
+    </div>
 {% endblock %}

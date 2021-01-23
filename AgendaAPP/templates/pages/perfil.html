@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block menu %}
     {% include 'base/menuhorinzontal.html' %}
@@ -28,6 +29,8 @@
 
         <!-- Main content -->
         <section class="content">
+            {% include 'pages/messages.html' %}
+
             <div class="container-fluid">
                 <div class="row justify-content-center">
                     <div class="col-md-4">
@@ -36,33 +39,37 @@
                             <div class="card-body box-profile">
                                 <div class="text-center">
                                     <img class="profile-user-img img-fluid img-circle"
-                                         src="{% static 'img/user4-128x128.jpg' %}"
+                                         src="{{ user.codPersona.foto.url }}"
                                          alt="User profile picture">
                                 </div>
 
-                                <h3 class="profile-username text-center">Nina Mcintire</h3>
+                                <h3 class="profile-username text-center">{{ user.codPersona.nombre }} {{ user.codPersona.apellido }}</h3>
 
-                                <p class="text-muted text-center">Software Engineer</p>
+                                <p class="text-muted text-center">{{ user.codPersona.trabajo }}</p>
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
-                                        <b>Followers</b> <a class="float-right">1,322</a>
+                                        <b>Fecha de Nacimiento</b> <a
+                                            class="float-right">{{ user.codPersona.fechaNacimiento }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Following</b> <a class="float-right">543</a>
+                                        <b>Pagina Web Personal</b> <a class="float-right">{{ user.codPersona.web }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Friends</b> <a class="float-right">13,287</a>
+                                        <b>Nº de Identificacion</b> <a
+                                            class="float-right">{{ user.codPersona.identificacion }}</a>
                                     </li>
                                 </ul>
 
                                 <a href="#" class="btn btn-primary btn-block" data-toggle="modal"
-                                   data-target="#modal-xl"><b>Editar</b></a>
+                                   data-target="#modaldatospersona"><b>Editar</b></a>
+                                <a href="{% url 'cambiarpassword' %}" class="btn btn-primary btn-block"><b>Cambiar
+                                    Contraseña</b></a>
                             </div>
                             <!-- /.card-body -->
                         </div>
                         <!-- /.card -->
-                        <div class="modal fade" id="modal-xl">
+                        <div class="modal fade" id="modaldatospersona">
                             <div class="modal-dialog modal-xl">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -74,33 +81,64 @@
                                     <div class="modal-body">
                                         <div class="card card-info">
                                             <div class="card-header">
-                                                <h3 class="card-title">Horizontal Form</h3>
+                                                <h3 class="card-title">Editar Informacion</h3>
                                             </div>
                                         </div>
-                                        <form class="form-horizontal">
+                                        <form method="post" enctype="multipart/form-data" class="form-horizontal">
+                                            {% csrf_token %}
                                             <div class="card-body">
                                                 <div class="form-group row">
-                                                    <label for="inputEmail3"
-                                                           class="col-sm-2 col-form-label">Email</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-                                                    </div>
+                                                    {{ form.nombre|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.nombre class='col-sm-10 form-control' %}
+                                                    <small>{{ form.nombre.errors }}</small>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="inputPassword3"
-                                                           class="col-sm-2 col-form-label">Password</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-                                                    </div>
+                                                    {{ form.apellido|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.apellido class='col-sm-10 form-control' %}
+                                                    <small>{{ form.apellido.errors }}</small>
                                                 </div>
+                                                <div class="form-group row">
+                                                    {{ form.fechaNacimiento|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.fechaNacimiento class='col-sm-10 form-control' %}
+                                                    <small>{{ form.fechaNacimiento.errors }}</small>
+                                                </div>
+                                                <div class="form-group row">
+                                                    {{ form.trabajo|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.trabajo class='col-sm-10 form-control' %}
+                                                    <small>{{ form.trabajo.errors }}</small>
+                                                </div>
+                                                <div class="form-group row">
+                                                    {{ form.alias|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.alias class='col-sm-10 form-control' %}
+                                                    <small>{{ form.alias.errors }}</small>
+                                                </div>
+                                                <div class="form-group row">
+                                                    {{ form.web|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.web class='col-sm-10 form-control' %}
+                                                    <small>{{ form.web.errors }}</small>
+                                                </div>
+                                                <div class="form-group row">
+                                                    {{ form.identificacion|add_label_class:'col-sm-2 col-form-label' }}
+                                                    {% render_field form.identificacion class='col-sm-10 form-control' %}
+                                                    <small>{{ form.identificacion.errors }}</small>
+                                                </div>
+                                                <div class="form-group ">
+                                                    {{ form.foto|add_label_class:'form-label' }}
+                                                    {% render_field form.foto class='form-control' %}
+                                                    <small>{{ form.foto.errors }}</small>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer justify-content-between">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Cerrar
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                                             </div>
                                         </form>
+
                                     </div>
-                                    <div class="modal-footer justify-content-between">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar
-                                        </button>
-                                        <button type="button" class="btn btn-primary">Guardar Cambios</button>
-                                    </div>
+
                                 </div>
                                 <!-- /.modal-content -->
                             </div>
@@ -108,48 +146,104 @@
                         </div>
                         <!-- /.modal -->
 
-                        <!-- About Me Box -->
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">About Me</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body">
-                                <strong><i class="fas fa-book mr-1"></i> Education</strong>
-
-                                <p class="text-muted">
-                                    B.S. in Computer Science from the University of Tennessee at Knoxville
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-
-                                <p class="text-muted">Malibu, California</p>
-
-                                <hr>
-
-                                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-                                <p class="text-muted">
-                                    <span class="tag tag-danger">UI Design</span>
-                                    <span class="tag tag-success">Coding</span>
-                                    <span class="tag tag-info">Javascript</span>
-                                    <span class="tag tag-warning">PHP</span>
-                                    <span class="tag tag-primary">Node.js</span>
-                                </p>
-
-                                <hr>
-
-                                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-                                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-                                    fermentum enim neque.</p>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                        <!-- /.card -->
                     </div>
+                    <!-- About Me Box -->
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Telefono</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <strong><i class="fas fa-phone"></i> Education</strong>
+
+                                        <p class="text-muted">
+                                            B.S. in Computer Science from the University of Tennessee at Knoxville
+                                        </p>
+
+                                        <hr>
+                                    </div>
+                                    <div class="row">
+                                        <strong><i class="fas fa-phone"></i> Education</strong>
+
+                                        <p class="text-muted">
+                                            B.S. in Computer Science from the University of Tennessee at Knoxville
+                                        </p>
+
+                                        <hr>
+                                    </div>
+                                    <div class="row">
+                                        <strong><i class="fas fa-phone"></i> Education</strong>
+
+                                        <p class="text-muted">
+                                            B.S. in Computer Science from the University of Tennessee at Knoxville
+                                        </p>
+
+                                        <hr>
+                                    </div>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Correo</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <strong><i class="far fa-file-alt mr-1"></i> Email</strong>
+
+                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                                        fermentum enim neque.</p>
+                                    <hr>
+                                    <strong><i class="far fa-file-alt mr-1"></i> Email</strong>
+
+                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                                        fermentum enim neque.</p>
+                                    <hr>
+                                    <strong><i class="far fa-file-alt mr-1"></i> Email</strong>
+
+                                    <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                                        fermentum enim neque.</p>
+                                    <hr>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h3 class="card-title">Dirección</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                                    <p class="text-muted">Malibu, California</p>
+
+                                    <hr>
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                                    <p class="text-muted">Malibu, California</p>
+
+                                    <hr>
+                                    <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                                    <p class="text-muted">Malibu, California</p>
+
+                                    <hr>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /.card -->
                 </div>
                 <!-- /.row -->
             </div><!-- /.container-fluid -->

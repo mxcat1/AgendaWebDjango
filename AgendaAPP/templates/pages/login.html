@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load widget_tweaks %}
 
 {% block body %}
     <div class="login-box">
@@ -12,20 +13,22 @@
 
                 <form method="post">
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Nombre de Usuario">
+                        {% render_field form.username class='form-control' placeholder="Nombre de Usuario" %}
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
                             </div>
                         </div>
+                        <small class="error">{{ form.username.errors }}</small>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Contraseña">
+                        {% render_field form.password class='form-control' placeholder="Contraseña" %}
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
+                        <small class="error">{{ form.password.errors }}</small>
                     </div>
                     <div class="row">
                         <div class="col-8">
@@ -42,13 +45,17 @@
                         </div>
                         <!-- /.col -->
                     </div>
+                    {% if message %}
+                        <small>{{ message }}</small>
+                    {% endif %}
+                    {% csrf_token %}
                 </form>
 
                 <p class="mb-1">
-                    <a href="forgot-password.html">Recuperrar Contraseña</a>
+                    <a href="{% url 'password_reset' %}">Recuperrar Contraseña</a>
                 </p>
                 <p class="mb-0">
-                    <a href="register.html" class="text-center">Registrar nuevo usuario</a>
+                    <a href="{% url 'registro' %}" class="text-center">Registrar nuevo usuario</a>
                 </p>
             </div>
             <!-- /.login-card-body -->
