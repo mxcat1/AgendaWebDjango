@@ -136,3 +136,19 @@ class TelefonoPersonaEditForm(ModelForm):
     class Meta:
         model = TelefonoPersona
         fields = ['numeroTelefono', 'detalleTelefono']
+
+
+class CorreoPersonaCreateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['codPersona'].required = False
+
+    class Meta:
+        model = CorreoPersona
+        fields = ['Correo', 'codPersona']
+
+
+class CorreoPersonaEditForm(ModelForm):
+    class Meta:
+        model = CorreoPersona
+        fields = ['Correo']

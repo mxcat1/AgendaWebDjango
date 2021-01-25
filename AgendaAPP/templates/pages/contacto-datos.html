@@ -210,23 +210,37 @@
                                                 <h3 class="card-title">Correos</h3>
                                             </div>
                                             <div class="col-sm-4 d-flex justify-content-end">
-                                                <a href="" class="btn btn-success btn-sm">Añadir</a>
+                                                <a href="{% url 'new-correo' personaid=contactodatos.codPersona.id %}"
+                                                   class="btn btn-success btn-sm">Añadir</a>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <strong><i class="far fa-file-alt mr-1"></i>
-                                                    xxxxxxxxxx@xxxxx.com</strong>
-                                            </div>
-                                            <div class="col-sm-4 d-flex justify-content-end align-items-center">
-                                                <a href=""><i class="fas fa-minus px-1" style="color:red;"></i></a>
-                                                <a href=""><i class="fas fa-pen px-1" style="color:green;"></i></a>
-                                            </div>
-                                        </div>
-                                        <hr>
+                                        {% if correoscontacto %}
+                                            {% for correo in correoscontacto %}
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <strong><i class="far fa-file-alt mr-1"></i>
+                                                            - {{ correo.Correo }}
+                                                        </strong>
+                                                    </div>
+                                                    <div class="col-sm-4 d-flex justify-content-end align-items-center">
+                                                        <a href="{% url 'delete-correo' correoid=correo.id %}"
+                                                           onClick="return confirm('¿Seguro que quieres borrar el correo de este Contacto {{ correo.Correo }}?');"><i
+                                                                class="fas fa-minus px-1" title="Eliminar Correo"
+                                                                style="color:red;"></i></a>
+                                                        <a href="{% url 'edit-correo' correoid=correo.id %}"><i
+                                                                class="fas fa-pen px-1" title="Editar Correo"
+                                                                style="color:green;"></i></a>
+                                                    </div>
+                                                    <hr>
+
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <strong>No se encontro Nungun Correo Registrado</strong>
+                                        {% endif %}
                                     </div>
                                     <!-- /.card-body -->
                                 </div>

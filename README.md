@@ -1,4 +1,4 @@
-# Proyecto para mi examen final de Lenguaje web 2 Instituto dele Sur
+# Proyecto para mi examen final de Lenguaje web 2 Instituto del Sur
 Todo el contenido trabajado sobre el proyecto de AgendaWeb se encuentra aqui para mas detalle comunicarse al siguiente correo
 c.n.vilca.apazagmail.com con el asunto de importante github
 
@@ -11,7 +11,7 @@ c.n.vilca.apazagmail.com con el asunto de importante github
    `$ git branch tunombre`<br>
 4. Cambiarse a la rama que crearon<br>
    `$ git checkout tunombre`<br>
-5. Para comprobar que van a  subir solo los archivos que modificaron <br>
+5. Para comprobar que van a subir solo los archivos que modificaron <br>
    - utilizar el comando:<br> 
       `$ git status`<br>
 6. Subir sus cambios a su rama<br>

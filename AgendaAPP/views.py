@@ -193,6 +193,7 @@ def contactodatos(request, contactoid):
     if request.user.is_authenticated:
         contactopersonadatos = Contacto.objects.get(id=contactoid)
         telefonos = TelefonoPersona.objects.filter(codPersona=contactopersonadatos.codPersona)
+        correos = CorreoPersona.objects.filter(codPersona=contactopersonadatos.codPersona)
         formcontactodatos = PersonaUpdateForm(instance=contactopersonadatos.codPersona)
         if request.method == 'POST':
             formcontactodatos = PersonaUpdateForm(request.POST, request.FILES, instance=contactopersonadatos.codPersona)
@@ -207,6 +208,7 @@ def contactodatos(request, contactoid):
         return render(request, 'pages/contacto-datos.html',
                       {'titlepage': 'Contacto Datos', 'tipopagina': 'sidebar-mini',
                        'contactodatos': contactopersonadatos, 'telefonoscontacto': telefonos,
+                       'correoscontacto': correos,
                        'form': formcontactodatos})
 
     else:
@@ -332,8 +334,6 @@ def telefonoeditar(request, telefonoid):
         return render(request, 'pages/telefonoedit.html',
                       {'titlepage': 'Editar Telefono Contacto', 'tipopagina': 'sidebar-mini',
                        'form': formedittelefono})
-
-
     else:
         return redirect('login')
 
@@ -349,7 +349,55 @@ def telefonoeliminar(request, telefonoid):
 
 
 def correonuevo(request, personaid):
-    return print('hola')
+    if request.user.is_authenticated:
+        formcorreonew = CorreoPersonaCreateForm()
+        if request.method == 'POST':
+            request.POST._mutable = True
+            request.POST['codPersona'] = str(personaid)
+            request.POST._mutable = False
+            formcorreonew = CorreoPersonaCreateForm(request.POST)
+            if formcorreonew.is_valid():
+                correonuevo = formcorreonew.save(commit=False)
+                correonuevo.save()
+                messages.success(request, 'Correo del Contacto Guardado')
+                return redirect('contactos')
+            else:
+                messages.error(request, 'No se pudo guardar el correo especificado')
+        return render(request, 'pages/correoadd.html',
+                      {'titlepage': 'Nuevo Correo del Contacto', 'tipopagina': 'sidebar-mini',
+                       'form': formcorreonew})
+    else:
+        return redirect('login')
+
+
+def correoeditar(request, correoid):
+    if request.user.is_authenticated:
+        correo = CorreoPersona.objects.get(id=correoid)
+        formcorreoedit = CorreoPersonaEditForm(instance=correo)
+        if request.method == 'POST':
+            formcorreoedit = CorreoPersonaEditForm(request.POST, instance=correo)
+            if formcorreoedit.is_valid():
+                correoeditado = formcorreoedit.save(commit=False)
+                correoeditado.save()
+                messages.success(request, 'Correo Editado con exito')
+                return redirect('contactos')
+            else:
+                messages.error(request, 'El correo no se pudo editar correctamente')
+        return render(request, 'pages/correoedit.html',
+                      {'titlepage': 'Editar Correo del Contacto', 'tipopagina': 'sidebar-mini',
+                       'form': formcorreoedit})
+    else:
+        return redirect('login')
+
+
+def correoeliminar(request, correoid):
+    if request.user.is_authenticated:
+        correodelete = CorreoPersona.objects.get(id=correoid)
+        correodelete.delete()
+        messages.success(request, 'Correo eliminado Correctamente')
+        return redirect('contactos')
+    else:
+        return redirect('login')
 
 
 def direccionnueva(request, personaid):

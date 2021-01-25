@@ -50,6 +50,8 @@ urlpatterns = [
     path('telefono/editar/<str:telefonoid>', AgendaAPPVistas.telefonoeditar, name='edit-telefono'),
     path('telefono/eliminar/<str:telefonoid>', AgendaAPPVistas.telefonoeliminar, name='delete-telefono'),
     path('correo/nueva/<str:personaid>', AgendaAPPVistas.correonuevo, name='new-correo'),
+    path('correo/editar/<str:correoid>', AgendaAPPVistas.correoeditar, name='edit-correo'),
+    path('correo/eliminar/<str:correoid>', AgendaAPPVistas.correoeliminar, name='delete-correo'),
     path('direccion/nueva/<str:personaid>', AgendaAPPVistas.direccionnueva, name='new-direction'),
     path('grupocontactos/', AgendaAPPVistas.grupocontactos, name='grupocontactos'),
     path('grupocontactos/editar/<int:idgrupocontacto>', AgendaAPPVistas.grupocontactoseditar,
