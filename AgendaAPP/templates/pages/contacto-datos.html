@@ -253,23 +253,37 @@
                                                 <h3 class="card-title">Direcciones</h3>
                                             </div>
                                             <div class="col-sm-4 d-flex justify-content-end">
-                                                <a href="" class="btn btn-success btn-sm">Añadir</a>
+                                                <a href="{% url 'new-direction' personaid=contactodatos.codPersona.id %}"
+                                                   class="btn btn-success btn-sm">Añadir</a>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-8">
-                                                <strong><i class="fas fa-map-marker-alt mr-1"></i> Dirrecion aa av
-                                                    aaa</strong>
-                                            </div>
-                                            <div class="col-sm-4 d-flex justify-content-end align-items-center">
-                                                <a href=""><i class="fas fa-minus px-1" style="color:red;"></i></a>
-                                                <a href=""><i class="fas fa-pen px-1" style="color:green;"></i></a>
-                                            </div>
-                                        </div>
-                                        <hr>
+                                        {% if direccionescontacto %}
+                                            {% for direccion in direccionescontacto %}
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                        <strong><i class="fas fa-map-marker-alt mr-1"></i>
+                                                            {{ direccion.tipoDireccion }} - {{ direccion.direccion }}
+                                                        </strong>
+                                                    </div>
+                                                    <div class="col-sm-4 d-flex justify-content-end align-items-center">
+                                                        <a href="{% url 'delete-direction' direccionid=direccion.id %}"
+                                                           onClick="return confirm('¿Seguro que quieres borrar la Direccion de este Contacto {{ direccion.direccion }}?');"><i
+                                                                class="fas fa-minus px-1" title="Eliminar Correo"
+                                                                style="color:red;"></i></a>
+                                                        <a href="{% url 'edit-direction' direccionid=direccion.id %}"><i
+                                                                class="fas fa-pen px-1" title="Editar Correo"
+                                                                style="color:green;"></i></a>
+                                                    </div>
+                                                    <hr>
+
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            <strong>No se encontro Nungun Correo Registrado</strong>
+                                        {% endif %}
 
                                     </div>
                                     <!-- /.card-body -->

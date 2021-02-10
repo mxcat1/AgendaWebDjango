@@ -194,6 +194,7 @@ def contactodatos(request, contactoid):
         contactopersonadatos = Contacto.objects.get(id=contactoid)
         telefonos = TelefonoPersona.objects.filter(codPersona=contactopersonadatos.codPersona)
         correos = CorreoPersona.objects.filter(codPersona=contactopersonadatos.codPersona)
+        direcciones = DireccionPersona.objects.filter(codPersona=contactopersonadatos.codPersona)
         formcontactodatos = PersonaUpdateForm(instance=contactopersonadatos.codPersona)
         if request.method == 'POST':
             formcontactodatos = PersonaUpdateForm(request.POST, request.FILES, instance=contactopersonadatos.codPersona)
@@ -209,6 +210,7 @@ def contactodatos(request, contactoid):
                       {'titlepage': 'Contacto Datos', 'tipopagina': 'sidebar-mini',
                        'contactodatos': contactopersonadatos, 'telefonoscontacto': telefonos,
                        'correoscontacto': correos,
+                       'direccionescontacto': direcciones,
                        'form': formcontactodatos})
 
     else:
@@ -401,4 +403,57 @@ def correoeliminar(request, correoid):
 
 
 def direccionnueva(request, personaid):
-    return print('hola')
+    if request.user.is_authenticated:
+        formdirecnew = DireccionPerosnaCreateForm()
+        if request.method == 'POST':
+            request.POST._mutable = True
+            request.POST['codPersona'] = str(personaid)
+            request.POST._mutable = False
+            formdirecnew = DireccionPerosnaCreateForm(request.POST)
+            if formdirecnew.is_valid():
+                direccionnueva = formdirecnew.save(commit=False)
+                direccionnueva.save()
+                messages.success(request, 'Nueva Dirrecion de Contacto Agregada con exito')
+                return redirect('contactos')
+            else:
+                messages.error(request, 'No se pudo Agregar Correctamente la direccion nueva')
+
+        return render(request, 'pages/direccionadd.html',
+                      {'titlepage': 'Añadir Direcion del Contacto', 'tipopagina': 'sidebar-mini',
+                       'form': formdirecnew})
+
+    else:
+        return redirect('login')
+
+
+def direccioneditar(request, direccionid):
+    if request.user.is_authenticated:
+        direccioncontacto = DireccionPersona.objects.get(id=direccionid)
+        formdirecedit = DireccionPersonaEditForm(instance=direccioncontacto)
+        if request.method == 'POST':
+            formdirecedit = DireccionPersonaEditForm(request.POST, instance=direccioncontacto)
+            if formdirecedit.is_valid():
+                direccioneditada = formdirecedit.save(commit=False)
+                direccioneditada.save()
+                messages.success(request, 'Dirrecion de Contacto Editada con exito')
+                return redirect('contactos')
+            else:
+                messages.error(request, 'No se pudo Editar los datos Correctamente de la direccion')
+
+        return render(request, 'pages/direccionedit.html',
+                      {'titlepage': 'Editar Direccion del Contacto', 'tipopagina': 'sidebar-mini',
+                       'form': formdirecedit})
+
+    else:
+        return redirect('login')
+
+
+def direccioneliminar(request, direccionid):
+    if request.user.is_authenticated:
+        direccioncontacto = DireccionPersona.objects.get(id=direccionid)
+        direccioncontacto.delete()
+        messages.success(request, 'Direccion eliminado Correctamente')
+        return redirect('contactos')
+
+    else:
+        return redirect('login')

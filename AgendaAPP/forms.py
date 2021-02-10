@@ -152,3 +152,19 @@ class CorreoPersonaEditForm(ModelForm):
     class Meta:
         model = CorreoPersona
         fields = ['Correo']
+
+
+class DireccionPerosnaCreateForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['codPersona'].required = False
+
+    class Meta:
+        model = DireccionPersona
+        fields = ['direccion', 'tipoDireccion', 'codPersona']
+
+
+class DireccionPersonaEditForm(ModelForm):
+    class Meta:
+        model = DireccionPersona
+        fields = ['direccion', 'tipoDireccion']
